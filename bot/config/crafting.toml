@@ -1,0 +1,43 @@
+# Leather bodies: needle on leather, answer the make-X box, bank, repeat.
+#
+# mode is one of:
+#   use_on_item    tool on material     (needle on leather, chisel on gems)
+#   use_on_object  material on object   (ore on a furnace)
+#   object         just click something (a spinning wheel, a range)
+
+[link]
+port = 8095
+
+[run]
+script = "craft"
+max_minutes = 120
+breaks = true
+stop_file = "STOP"
+
+[safety]
+food = []
+use_run = true
+
+[script]
+mode = "use_on_item"
+tool = "Needle"
+material = "Leather"
+products = ["Leather body"]
+batch_timeout = 60
+
+# What to take out of the bank each trip. quantity is a number or "all".
+withdraw = [
+    { item = "Leather", quantity = "all" },
+    { item = "Thread", quantity = 1, keep_at = 1 },
+]
+
+bank_names = ["Bank booth", "Bank chest", "Banker"]
+# bank_tile = [3185, 3436, 0]   # walk here when no bank is in sight
+
+# If a client update moves an interface, correct it here rather than in
+# the code. Find the new address with:
+#   python -m osrsbot.cli inspect --group 12 --child 44
+[widgets]
+bank_deposit_inventory = [12, 44]
+bank_item_container = [12, 13]
+# logout_tab = [161, 57]

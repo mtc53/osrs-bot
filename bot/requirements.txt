@@ -1,0 +1,9 @@
+# There are none.
+#
+# State comes over HTTP (urllib), input goes through SendInput (ctypes),
+# config is TOML (tomllib). All standard library.
+#
+# Python 3.11 or newer, for tomllib.
+#
+# Tests only:
+#   pytest

@@ -1,0 +1,32 @@
+# Chop oaks, drop the logs, repeat.
+#
+# The simplest possible loop, and the right one to prove the setup with
+# before trusting anything longer.
+
+[link]
+port = 8095
+token = ""
+
+[run]
+script = "gather"
+max_minutes = 90
+breaks = true
+work_minutes = [22, 48]
+break_minutes = [3, 11]
+stop_file = "STOP"
+# mouse_speed = 1.0   # higher is faster; below 0.6 the hover check starts failing
+
+[safety]
+food = []              # nothing to eat while woodcutting
+use_run = true
+run_above = 35
+fidget = true
+
+[script]
+# Names are matched case-insensitively as substrings, so "Oak" catches
+# "Oak tree". Check what the client actually calls a thing with:
+#   python -m osrsbot.cli menu --watch
+resources = ["Oak tree"]
+action = "Chop down"
+when_full = "drop"
+keep = ["axe"]         # never drop anything whose name contains "axe"

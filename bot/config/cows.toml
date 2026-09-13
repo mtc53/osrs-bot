@@ -1,0 +1,25 @@
+# Kill cows, eat when hurt, pick up the hides.
+
+[link]
+port = 8095
+
+[run]
+script = "combat"
+max_minutes = 120
+breaks = true
+stop_file = "STOP"
+
+[safety]
+food = ["Trout", "Salmon", "Lobster"]
+eat_at_percent = 55
+panic_at_percent = 25
+logout_on_panic = true
+stop_if_attacked = false   # set true outside safe areas
+use_run = true
+
+[script]
+targets = ["Cow", "Cow calf"]
+loot = ["Cowhide"]
+bury = []                  # e.g. ["Bones"] to bury as you go
+max_distance = 9
+loot_distance = 6
