@@ -41,3 +41,11 @@ bank_names = ["Bank booth", "Bank chest", "Banker"]
 bank_deposit_inventory = [12, 44]
 bank_item_container = [12, 13]
 # logout_tab = [161, 57]
+
+# Publish a live status snapshot to the myprojects.cc hub. Status only - no
+# account or character data. Leave token empty to turn it off, or set
+# MYPROJECTS_TOKEN in the environment instead of putting it here.
+[publish]
+repo = "mtc53/myprojects-site"
+token = ""         # fine-grained GitHub token, Contents: write on the site repo
+interval = 60      # seconds between updates while running
