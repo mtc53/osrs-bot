@@ -25,6 +25,7 @@ from . import safety
 from .api import Game
 from .input import Keyboard, Mouse
 from .scripts import combat, craft, gather
+from .publish import Publisher
 from .state import StateClient, StateError
 from .task import BreakScheduler, Context, Runner, Stats, Stop
 
@@ -107,8 +108,18 @@ def cmd_run(args: argparse.Namespace) -> int:
     if stop_file:
         log(f"or when {stop_file} appears")
 
+    pub_cfg = config.get("publish", {})
+    publisher = Publisher(script=name,
+                          repo=str(pub_cfg.get("repo", "")),
+                          token=str(pub_cfg.get("token", "")),
+                          log=log)
+    if publisher.enabled:
+        log(f"publishing status to {publisher.repo}")
+
     runner = Runner(tasks, ctx, breaks=breaks, max_runtime=max_runtime,
-                    stop_file=stop_file)
+                    stop_file=stop_file,
+                    heartbeat=publisher.beat if publisher.enabled else None,
+                    heartbeat_interval=float(pub_cfg.get("interval", 60)))
     try:
         runner.loop()
     except StateError as exc:

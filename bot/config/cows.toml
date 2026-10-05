@@ -23,3 +23,11 @@ loot = ["Cowhide"]
 bury = []                  # e.g. ["Bones"] to bury as you go
 max_distance = 9
 loot_distance = 6
+
+# Publish a live status snapshot to the myprojects.cc hub. Status only - no
+# account or character data. Leave token empty to turn it off, or set
+# MYPROJECTS_TOKEN in the environment instead of putting it here.
+[publish]
+repo = "mtc53/myprojects-site"
+token = ""         # fine-grained GitHub token, Contents: write on the site repo
+interval = 60      # seconds between updates while running

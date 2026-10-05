@@ -30,3 +30,11 @@ resources = ["Oak tree"]
 action = "Chop down"
 when_full = "drop"
 keep = ["axe"]         # never drop anything whose name contains "axe"
+
+# Publish a live status snapshot to the myprojects.cc hub. Status only - no
+# account or character data. Leave token empty to turn it off, or set
+# MYPROJECTS_TOKEN in the environment instead of putting it here.
+[publish]
+repo = "mtc53/myprojects-site"
+token = ""         # fine-grained GitHub token, Contents: write on the site repo
+interval = 60      # seconds between updates while running

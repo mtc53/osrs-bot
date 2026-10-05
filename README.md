@@ -218,3 +218,26 @@ cd bot && python -m pytest tests/ -q
 Bound to `127.0.0.1` only. Scene objects are not exported until `/watch`
 asks for them by name — scanning every tile around the player each tick
 for nobody is the one thing on the plugin side that would cost frames.
+
+## Publishing status to myprojects.cc
+
+The bot can show its status on the hub at myprojects.cc — **status only**. It
+pushes the same numbers its run summary prints (session time, actions, failures,
+xp gained) every minute while running, and once more when it stops. No account
+name, world or character data is ever published.
+
+Turn it on in a config's `[publish]` section, or with environment variables:
+
+```toml
+[publish]
+repo = "mtc53/myprojects-site"
+token = ""      # fine-grained token, Contents: write on the site repo
+interval = 60
+```
+
+```
+MYPROJECTS_TOKEN=xxx python -m osrsbot.cli run config/woodcutting.toml
+```
+
+With no token set, publishing is skipped and the run is unaffected. The snapshot
+follows the site's data contract (see `DATA_CONTRACT.md` in myprojects-site).

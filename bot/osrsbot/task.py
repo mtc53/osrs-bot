@@ -174,14 +174,33 @@ class Runner:
     def __init__(self, tasks: list[Task], ctx: Context,
                  breaks: BreakScheduler | None = None,
                  max_runtime: float | None = None,
-                 stop_file: Path | None = None):
+                 stop_file: Path | None = None,
+                 heartbeat: Callable[[Stats, "State", bool], None] | None = None,
+                 heartbeat_interval: float = 60.0):
         self.tasks = tasks
         self.ctx = ctx
         self.breaks = breaks
         self.max_runtime = max_runtime
         self.stop_file = stop_file
+        self.heartbeat = heartbeat
+        self.heartbeat_interval = heartbeat_interval
+        self._last_beat = 0.0
         self.running = True
         self._install_signal_handler()
+
+    def _beat(self, state: "State | None", final: bool = False) -> None:
+        """Hand the current stats to the heartbeat, at most once per interval.
+        A failing heartbeat never touches the run."""
+        if not self.heartbeat:
+            return
+        now = time.time()
+        if not final and now - self._last_beat < self.heartbeat_interval:
+            return
+        self._last_beat = now
+        try:
+            self.heartbeat(self.ctx.stats, state, final)
+        except Exception as exc:
+            self.ctx.log(f"  (heartbeat error: {exc})")
 
     def _install_signal_handler(self) -> None:
         def handle(signum, frame):
@@ -236,6 +255,7 @@ class Runner:
 
             self.ctx.stats.iterations += 1
             self.ctx.stats.note_xp(state)
+            self._beat(state)
 
             if not state.logged_in:
                 log(f"  waiting: not logged in ({state.game_state})")
@@ -272,6 +292,7 @@ class Runner:
 
         summary = self.ctx.stats.summary(self.ctx.game.state)
         log(summary)
+        self._beat(self.ctx.game.state, final=True)
         return self.ctx.stats
 
     def _pick(self, state: State) -> Task | None:
